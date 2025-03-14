@@ -1,10 +1,20 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const isSidebarOpen = ref(true); // Start with the sidebar open
+const isSidebarOpen = ref(true);
+const isDashboardDropdownOpen = ref(false);
+const isUsersDropdownOpen = ref(false);
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const toggleDashboardDropdown = () => {
+  isDashboardDropdownOpen.value = !isDashboardDropdownOpen.value;
+};
+
+const toggleUsersDropdown = () => {
+  isUsersDropdownOpen.value = !isUsersDropdownOpen.value;
 };
 
 // Handle mouse enter and leave events for hover functionality
@@ -27,11 +37,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- Import Boxicons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" />
 
   <div class="container">
-    <!-- Sidebar -->
     <aside 
       :class="['sidebar', { 'show': isSidebarOpen }]" 
       @mouseenter="handleMouseEnter" 
@@ -39,18 +47,34 @@ onMounted(() => {
       <nav>
         <h2 class="logo">MyApp</h2>
         <ul>
+          <!-- Dashboard Dropdown -->
           <li>
-            <a href="#" class="nav_link active">
+            <a href="#" class="nav_link" @click="toggleDashboardDropdown">
               <i class='bx bx-grid-alt'></i> 
               <span class="nav-text">Dashboard</span>
+              <i class='bx bx-chevron-down dropdown-icon'></i>
             </a>
+            <ul v-if="isDashboardDropdownOpen" class="dropdown-menu">
+              <li><a href="#">Overview</a></li>
+              <li><a href="#">Analytics</a></li>
+              <li><a href="#">Reports</a></li>
+            </ul>
           </li>
+
+          <!-- Users Dropdown -->
           <li>
-            <a href="#" class="nav_link">
+            <a href="#" class="nav_link" @click="toggleUsersDropdown">
               <i class='bx bx-user'></i> 
               <span class="nav-text">Users</span>
+              <i class='bx bx-chevron-down dropdown-icon'></i>
             </a>
+            <ul v-if="isUsersDropdownOpen" class="dropdown-menu">
+              <li><a href="#">Manage Users</a></li>
+              <li><a href="#">Roles</a></li>
+              <li><a href="#">Permissions</a></li>
+            </ul>
           </li>
+
           <li>
             <a href="#" class="nav_link">
               <i class='bx bx-message-square-detail'></i> 
@@ -73,7 +97,6 @@ onMounted(() => {
       </nav>
     </aside>
 
-    <!-- Main Content -->
     <main>
       <header></header>
       <section class="content">
@@ -123,6 +146,7 @@ onMounted(() => {
   padding: 10px;
   border-radius: 5px;
   transition: background 0.3s;
+  justify-content: space-between;
 }
 
 .sidebar ul li a i {
@@ -130,20 +154,50 @@ onMounted(() => {
   margin-right: 10px;
 }
 
-/* When sidebar is minimized, hide text */
 .sidebar:not(.show) .nav-text {
   opacity: 0;
   visibility: hidden;
 }
 
-/* Keep icons visible when sidebar is minimized */
 .sidebar:not(.show) i {
-  font-size: 1.5rem; /* Adjust the icon size if needed */
+  font-size: 1.5rem;
 }
 
 /* Sidebar link hover and active state */
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
   background: #555;
+}
+
+.dropdown-menu {
+  background: #D9DBF1;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.dropdown-menu li {
+  margin: 2px 0; /* Reduce space between items */
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 1px 1px; /* Reduce padding */
+  color: black;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 0.9rem; /* Adjust font size if necessary */
+}
+
+.dropdown-menu li a:hover {
+  background: #ccc;
+}
+
+/* Dropdown icon rotation */
+.dropdown-icon {
+  transition: transform 0.3s;
+}
+
+.nav_link[aria-expanded="true"] .dropdown-icon {
+  transform: rotate(180deg);
 }
 </style>
