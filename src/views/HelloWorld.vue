@@ -2,11 +2,16 @@
 import { ref, onMounted } from 'vue';
 
 const isSidebarOpen = ref(true);
-const isDashboardDropdownOpen = ref(false);
-const isUsersDropdownOpen = ref(false);
+const isCmsDropdownOpen = ref(false); // CMS dropdown
+const isDashboardDropdownOpen = ref(false); // Dashboard dropdown
+const isUsersDropdownOpen = ref(false); // Users dropdown
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+const toggleCmsDropdown = () => {
+  isCmsDropdownOpen.value = !isCmsDropdownOpen.value;
 };
 
 const toggleDashboardDropdown = () => {
@@ -35,10 +40,7 @@ onMounted(() => {
   });
 });
 </script>
-
 <template>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" />
-
   <div class="container">
     <aside 
       :class="['sidebar', { 'show': isSidebarOpen }]" 
@@ -47,51 +49,41 @@ onMounted(() => {
       <nav>
         <h2 class="logo">MyApp</h2>
         <ul>
-          <!-- Dashboard Dropdown -->
+          <!-- CMS Dropdown -->
           <li>
-            <a href="#" class="nav_link" @click="toggleDashboardDropdown">
-              <i class='bx bx-grid-alt'></i> 
-              <span class="nav-text">Dashboard</span>
-              <i class='bx bx-chevron-down dropdown-icon'></i>
+            <a href="#" class="nav_link" @click="toggleCmsDropdown">
+              <span class="nav-text">CMS</span>
+              <i class="bx bx-chevron-down dropdown-icon"></i>
             </a>
-            <ul v-if="isDashboardDropdownOpen" class="dropdown-menu">
-              <li><a href="#">Overview</a></li>
-              <li><a href="#">Analytics</a></li>
-              <li><a href="#">Reports</a></li>
+            <ul v-if="isCmsDropdownOpen" class="dropdown-menu">
+              <!-- Dashboard Item -->
+              <li>
+                <a href="#" @click="toggleDashboardDropdown">
+                  <span class="nav-text">Dashboard</span>
+                  <i class="bx bx-chevron-down dropdown-icon"></i>
+                </a>
+                <ul v-if="isDashboardDropdownOpen" class="dropdown-menu">
+                  <li><a href="#">Overview</a></li>
+                  <li><a href="#">Analytics</a></li>
+                  <li><a href="#">Reports</a></li>
+                </ul>
+              </li>
+              <!-- Users Item -->
+              <li>
+                <a href="#" @click="toggleUsersDropdown">
+                  <span class="nav-text">Users</span>
+                  <i class="bx bx-chevron-down dropdown-icon"></i>
+                </a>
+                <ul v-if="isUsersDropdownOpen" class="dropdown-menu">
+                  <li><a href="#">Manage Users</a></li>
+                  <li><a href="#">Roles</a></li>
+                  <li><a href="#">Permissions</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Messages</a></li>
+              <li><a href="#">Files</a></li>
+              <li><a href="#">Settings</a></li>
             </ul>
-          </li>
-
-          <!-- Users Dropdown -->
-          <li>
-            <a href="#" class="nav_link" @click="toggleUsersDropdown">
-              <i class='bx bx-user'></i> 
-              <span class="nav-text">Users</span>
-              <i class='bx bx-chevron-down dropdown-icon'></i>
-            </a>
-            <ul v-if="isUsersDropdownOpen" class="dropdown-menu">
-              <li><a href="#">Manage Users</a></li>
-              <li><a href="#">Roles</a></li>
-              <li><a href="#">Permissions</a></li>
-            </ul>
-          </li>
-
-          <li>
-            <a href="#" class="nav_link">
-              <i class='bx bx-message-square-detail'></i> 
-              <span class="nav-text">Messages</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav_link">
-              <i class='bx bx-folder'></i> 
-              <span class="nav-text">Files</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav_link">
-              <i class='bx bx-cog'></i> 
-              <span class="nav-text">Settings</span>
-            </a>
           </li>
         </ul>
       </nav>
@@ -106,7 +98,6 @@ onMounted(() => {
     </main>
   </div>
 </template>
-
 <style scoped>
 .sidebar {
   width: 200px;
@@ -116,7 +107,7 @@ onMounted(() => {
   top: 0;
   left: -200px;
   height: 100vh;
-  padding: 20px;
+  padding: 10px 10px 20px;
   transition: 0.3s ease-in-out;
 }
 
@@ -126,7 +117,7 @@ onMounted(() => {
 
 .sidebar h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .sidebar ul {
@@ -135,7 +126,7 @@ onMounted(() => {
 }
 
 .sidebar ul li {
-  margin: 15px 0;
+  margin: 10px 0;
 }
 
 .sidebar ul li a {
@@ -143,53 +134,36 @@ onMounted(() => {
   text-decoration: none;
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 8px 10px;
   border-radius: 5px;
   transition: background 0.3s;
   justify-content: space-between;
 }
 
-.sidebar ul li a i {
-  font-size: 1.5rem;
-  margin-right: 10px;
-}
 
-.sidebar:not(.show) .nav-text {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.sidebar:not(.show) i {
-  font-size: 1.5rem;
-}
-
-/* Sidebar link hover and active state */
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
-  background: #555;
-}
 
 .dropdown-menu {
   background: #D9DBF1;
-  padding-left: 20px;
+  padding-left: 10px;
   list-style: none;
 }
 
 .dropdown-menu li {
-  margin: 2px 0; /* Reduce space between items */
+  margin: 2px 0;
 }
 
 .dropdown-menu li a {
   display: block;
-  padding: 1px 1px; /* Reduce padding */
+  padding: 5px 10px;
   color: black;
   text-decoration: none;
   transition: 0.3s;
-  font-size: 0.9rem; /* Adjust font size if necessary */
+  font-size: 0.9rem;
 }
 
 .dropdown-menu li a:hover {
   background: #ccc;
+  
 }
 
 /* Dropdown icon rotation */
@@ -200,4 +174,9 @@ onMounted(() => {
 .nav_link[aria-expanded="true"] .dropdown-icon {
   transform: rotate(180deg);
 }
+.dropdown-icon {
+  font-size: 20px; /* Set the size of the dropdown icon */
+  transition: transform 0.3s;
+}
+
 </style>
